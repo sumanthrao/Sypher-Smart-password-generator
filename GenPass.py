@@ -383,10 +383,6 @@ def Rule17(passwd):
     hello -> ihqlo
     '''
     debug("Rule17")
-<<<<<<< HEAD
-=======
-
->>>>>>> master
     new_pass = list(passwd)
 
     my_seq = []
@@ -404,10 +400,6 @@ def Rule17(passwd):
     debug("#*#*#*#*#*#*#*#*#*#*#*#*#*#*#")
 
     return ''.join(new_pass)
-<<<<<<< HEAD
-=======
-
->>>>>>> master
     return passwd
 
 def Rule18(passwd):
@@ -626,17 +618,12 @@ def Rule28(inp_str):
 
 # Check this function --- Introducing Gibberish characters
 def Rule29(inp_str):
-<<<<<<< HEAD
     '''
     depending on the seq , either the odd indices
     or the even indices are either incremented or decremented
     by sum(seq)%3
     '''
     debug("Rule29")
-=======
-    debug("Rule29")
-
->>>>>>> master
     chrs = list(inp_str);
     a = sum(seq) % 3
 
@@ -659,11 +646,6 @@ def Rule29(inp_str):
     debug("#*#*#*#*#*#*#*#*#*#*#*#*#*#*#")
 
     return out
-<<<<<<< HEAD
-=======
-
-    return inp_str
->>>>>>> master
 
 def Rule30(inp_str):
     '''
@@ -688,16 +670,11 @@ def Rule30(inp_str):
     return out
 
 def Rule31(inp_str):
-<<<<<<< HEAD
     '''
     condenses consecutive same characters
     into countCharacter
     '''
     debug("Rule31")
-=======
-    debug("Rule31")
-
->>>>>>> master
     chrs = list(inp_str)
     out = []
     count = 1
@@ -721,11 +698,6 @@ def Rule31(inp_str):
     debug("#*#*#*#*#*#*#*#*#*#*#*#*#*#*#")
 
     return out
-<<<<<<< HEAD
-=======
-
-    return inp_str
->>>>>>> master
 
 def Rule32(inp_str):
     '''
@@ -879,13 +851,6 @@ def main():
         to_remember = int2base32(int(num))
         alpha={'a':'Apple','b':'Ball','c':'Cat','d':'Dog','e':'English','f':'False','g':'God','h':'Hat','i':'India','j':'Jammu','k':'Kashmir','l':'Lemon','m':'Mango','n':'Nike','o':'Orange','p':'Puma','q':'Queue','r':'Rice','s':'Sad','t':'Tall','u':'Up','v':'Van','w':'War','x':'Exit','y':'Yellow','z':'Zebra'}
 
-<<<<<<< HEAD
-        print("\n\nRemember this shit !! --> ", to_remember, end = '\n\n')
-
-
-
-        # l = [31, 6, 31, 7, 28, 30, 29]
-=======
         print("\n\nRemember this key --> ", to_remember, end = '\n\n')
         print("\nThis may help :)\n")
         for g in to_remember:
@@ -893,7 +858,6 @@ def main():
                 print(' ',g,'as in ',alpha[g.lower()])
             else:
                 print(' ',g)
->>>>>>> master
         # Cascade apply the rules
         ends = user_pass
 
