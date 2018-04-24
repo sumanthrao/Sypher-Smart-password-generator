@@ -6,7 +6,7 @@ from entropy import PasswordStrength
 
 myrg = random.SystemRandom()
 
-DEBUG2 = True
+DEBUG2 = False
 
 def debug2(msg):
     if(DEBUG2):
@@ -93,7 +93,7 @@ def strengthen(pw):
     GenPass.times = (user_sequence_length % 3) + 1
 
     GenPass.symbol = gimme_special_symbol()
-
+    #print("symbol : ", Genpass.symbol)
     # We now generate the sequence of random numbers
     GenPass.seq = [random.randint(1, len(user_pass)-1) for i in range(user_sequence_length)]
     #print("seq =", seq)
@@ -129,15 +129,16 @@ def strengthen(pw):
             print("SEQUENCE HAS BEEN MODIFIED!!!")
             exit(0)
         if(len(ends) < prev_length):
-            print("PASSWORD LENGTH HAS BEEN REDUCED!!!")
-            print("RULE", i, sep = "")
-            exit(0)
+            #print("PASSWORD LENGTH HAS BEEN REDUCED!!!")
+            #print("RULE", i, sep = "")
+            #exit(0)
+            pass
 
     ends = Rule18(ends)
     #print(ends)
     return (ends, to_remember)
 
-'''
+
 for length in [5, 7, 10, 12]:
     #print('\t\tPassword generation of length - '+str(length))
     for k in [0, 1, 2]:
@@ -187,15 +188,16 @@ for k, v in values.items():
 print("\n")
 print("$" * 75)
 print('\n')
-'''
+
 '''
 x = "shahid_ikram"
 print(strengthen(x))
 '''
 
-
+'''
 # To Debug a Rule
-for i in range(1000):
+#GenPass.symbol = '#'
+for i in range(100000):
     print(i+1)
     pw = str().join(myrg.choice(charset[1]) for _ in range(10))
     #pw = "hello"
@@ -207,7 +209,12 @@ for i in range(1000):
     print(GenPass.seq)
 
     ends = pw
+    ends2 = pw
     for j in range(1, 15):
-        ends = rules[random.randint(1, 35)](ends)
+        z = random.randint(1, 35)
+        print("RULE" + str(z))
+        ends = rules[z](ends)
 
+    print("pass = ", ends)
     print("_" * 75)
+'''
