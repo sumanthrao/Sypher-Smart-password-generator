@@ -197,6 +197,7 @@ print(strengthen(x))
 '''
 # To Debug a Rule
 #GenPass.symbol = '#'
+'''
 for i in range(100000):
     print(i+1)
     pw = str().join(myrg.choice(charset[1]) for _ in range(10))

@@ -383,6 +383,10 @@ def Rule17(passwd):
     hello -> ihqlo
     '''
     debug("Rule17")
+<<<<<<< HEAD
+=======
+
+>>>>>>> master
     new_pass = list(passwd)
 
     my_seq = []
@@ -400,6 +404,10 @@ def Rule17(passwd):
     debug("#*#*#*#*#*#*#*#*#*#*#*#*#*#*#")
 
     return ''.join(new_pass)
+<<<<<<< HEAD
+=======
+
+>>>>>>> master
     return passwd
 
 def Rule18(passwd):
@@ -618,12 +626,17 @@ def Rule28(inp_str):
 
 # Check this function --- Introducing Gibberish characters
 def Rule29(inp_str):
+<<<<<<< HEAD
     '''
     depending on the seq , either the odd indices
     or the even indices are either incremented or decremented
     by sum(seq)%3
     '''
     debug("Rule29")
+=======
+    debug("Rule29")
+
+>>>>>>> master
     chrs = list(inp_str);
     a = sum(seq) % 3
 
@@ -646,6 +659,11 @@ def Rule29(inp_str):
     debug("#*#*#*#*#*#*#*#*#*#*#*#*#*#*#")
 
     return out
+<<<<<<< HEAD
+=======
+
+    return inp_str
+>>>>>>> master
 
 def Rule30(inp_str):
     '''
@@ -670,11 +688,16 @@ def Rule30(inp_str):
     return out
 
 def Rule31(inp_str):
+<<<<<<< HEAD
     '''
     condenses consecutive same characters
     into countCharacter
     '''
     debug("Rule31")
+=======
+    debug("Rule31")
+
+>>>>>>> master
     chrs = list(inp_str)
     out = []
     count = 1
@@ -698,6 +721,11 @@ def Rule31(inp_str):
     debug("#*#*#*#*#*#*#*#*#*#*#*#*#*#*#")
 
     return out
+<<<<<<< HEAD
+=======
+
+    return inp_str
+>>>>>>> master
 
 def Rule32(inp_str):
     '''
@@ -801,12 +829,14 @@ def main():
     option = int(input())
     if(option == 1):
         print("\n\t\tTHE PASSWORD GENERATOR\n\n")
-        user_pass = input("  Enter some password you can remember (It can be phrase too)\n\n  : ")
+        user_pass = input("  Enter a base password that you can remember (It can be phrase too)\n\n  : ")
 
         # We give a random number sequence to the user indicating the positions at which
         # tweaking should be done to the base password incase that rule is applied to the password
 
         # The length the sequence is limited to be 3 - 7
+
+        user_level =int(input("\n    Enter the strength level required:\n\n 1 - Moderate\n 2 - Fairly Strong\n 3 - Highly Strong \n"))
         user_sequence_length = (random.randint(3, random.randint(3, 7)))
 
         times = (user_sequence_length % 3) + 1
@@ -825,8 +855,12 @@ def main():
         # How many rules to apply for this user?
 
         # Generate random number of random numbers!!
-
-        num_rules = (random.randint(5, random.randint(5, 8)))
+        if(user_level==1):
+            num_rules = (random.randint(3, random.randint(3, 6)))
+        elif(user_level==2):
+            num_rules = (random.randint(5, random.randint(5, 9)))
+        else:
+            num_rules = (random.randint(7, random.randint(7, 11)))
 
         l = [random.randint(1, 35) for i in range(num_rules)]
         debug("l = " + str(l))
@@ -843,12 +877,23 @@ def main():
         debug(num)
 
         to_remember = int2base32(int(num))
+        alpha={'a':'Apple','b':'Ball','c':'Cat','d':'Dog','e':'English','f':'False','g':'God','h':'Hat','i':'India','j':'Jammu','k':'Kashmir','l':'Lemon','m':'Mango','n':'Nike','o':'Orange','p':'Puma','q':'Queue','r':'Rice','s':'Sad','t':'Tall','u':'Up','v':'Van','w':'War','x':'Exit','y':'Yellow','z':'Zebra'}
 
+<<<<<<< HEAD
         print("\n\nRemember this shit !! --> ", to_remember, end = '\n\n')
 
 
 
         # l = [31, 6, 31, 7, 28, 30, 29]
+=======
+        print("\n\nRemember this key --> ", to_remember, end = '\n\n')
+        print("\nThis may help :)\n")
+        for g in to_remember:
+            if(g.isalpha()):
+                print(' ',g,'as in ',alpha[g.lower()])
+            else:
+                print(' ',g)
+>>>>>>> master
         # Cascade apply the rules
         ends = user_pass
 
