@@ -137,7 +137,7 @@ def strengthen(pw):
     #print(ends)
     return (ends, to_remember)
 
-'''
+
 for length in [5, 7, 10, 12]:
     #print('\t\tPassword generation of length - '+str(length))
     for k in [0, 1, 2]:
@@ -187,14 +187,15 @@ for k, v in values.items():
 print("\n")
 print("$" * 75)
 print('\n')
-'''
+
 '''
 x = "shahid_ikram"
 print(strengthen(x))
 '''
 
-
 # To Debug a Rule
+'''
+GenPass.symbol="#"
 for i in range(1000):
     print(i+1)
     pw = str().join(myrg.choice(charset[1]) for _ in range(10))
@@ -211,3 +212,4 @@ for i in range(1000):
         ends = rules[random.randint(1, 35)](ends)
 
     print("_" * 75)
+'''
