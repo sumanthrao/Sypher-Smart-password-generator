@@ -7,7 +7,7 @@ from entropy import PasswordStrength
 
 seq = []
 times = 2
-symbol = ''
+symbol = '#'
 dt = None
 
 # Set this variable to True if wanna debug
@@ -182,13 +182,17 @@ def Rule6(passwd):
     indicated by your random number sequence
     '''
     debug("Rule6")
+    my_seq = []
+    for i in seq:
+        my_seq.append(i % len(passwd))
 
     def f(i):
-        if(i + 1 in seq):
+        if(i + 1 in my_seq):
             return getNextChar(passwd[i], True)
         else:
             return passwd[i]
-    new_pass = ''.join([f(i) for i in range(len(passwd))])
+
+    new_pass = ''.join([f(j) for j in range(len(passwd))])
     debug(new_pass)
     debug("#*#*#*#*#*#*#*#*#*#*#*#*#*#*#")
     return new_pass
@@ -199,8 +203,11 @@ def Rule7(passwd):
     indicated by your random number sequence
     '''
     debug("Rule7")
+    my_seq = []
+    for i in seq:
+        my_seq.append(i % len(passwd))
     def f(i):
-        if(i + 1 in seq):
+        if(i + 1 in my_seq):
             return getNextChar(passwd[i], False)
         else:
             return passwd[i]
@@ -265,7 +272,7 @@ def Rule10(passwd):
     so hello becomes elhlo
     '''
     debug("Rule10")
-    seq2 = list(map(lambda x: x - 1, seq))
+    seq2 = list(map(lambda x: ((x - 1)%(len(passwd))), seq))
     new_pass = list(passwd)
 
     i = 1
@@ -376,20 +383,23 @@ def Rule17(passwd):
     hello -> ihqlo
     '''
     debug("Rule17")
-    '''
     new_pass = list(passwd)
+
+    my_seq = []
+    for i in seq:
+        my_seq.append(i % len(passwd))
+
     i = 0
-    for j in seq:
+    for j in my_seq:
         for k in range(j):
-            print(i)
-            new_pass[i] = getNextChar(new_pass[i], True)
+            #print(i)
+            new_pass[i % len(new_pass)] = getNextChar(new_pass[i % len(new_pass)], True)
         i = i + 1
 
     debug(''.join(new_pass))
     debug("#*#*#*#*#*#*#*#*#*#*#*#*#*#*#")
 
     return ''.join(new_pass)
-    '''
     return passwd
 
 def Rule18(passwd):
@@ -412,7 +422,7 @@ def Rule19(passwd):
     mycoisam              -> perfect! just the initial two letters
     mcia                  -> if its more than 5 words long
     """
-
+    debug("Rule19")
     debug("#*#*#*#*#*#*#*#*#*#*#*#*#*#*#")
     return passwd
 
@@ -433,6 +443,7 @@ def Rule20(passwd):
 
 def Rule21(passwd):
     '''
+    Replace chars like s with $ and so on...
     '''
     debug("Rule21")
 
@@ -448,6 +459,10 @@ def Rule21(passwd):
     add_val(dicti, "H", "#")
     add_val(dicti, "G", "6")
     add_val(dicti, "l", "/")
+    add_val(dicti, 'S', "$")
+    add_val(dicti, 'A', "4")
+    add_val(dicti, 'i', "!")
+    add_val(dicti, "D", "|)")
 
     debug(dicti)
 
@@ -470,6 +485,7 @@ def Rule22(passwd):
     value = len(passwd)
     #index = random.randint(1, len(passwd) - 1)
     index = ((max(seq) + min(seq)) // 2)
+    index = index % value
     myString = passwd[ :index] + str(value) + passwd[index : ]
 
     debug(myString)
@@ -482,15 +498,17 @@ def Rule23(passwd):
     '''
     debug("Rule23")
     temp = ""
-    i=0
+    i = 0
     for character in passwd:
-        if(i % 2 == 0):
+        if((i % 2) == 0):
             if(character.isalpha() and character.isupper()):
                 temp += character.lower()
             elif(character.isalpha()):
                 temp += character.upper()
             else:
                 temp += character
+        else:
+            temp += character
     debug(temp)
     debug("#*#*#*#*#*#*#*#*#*#*#*#*#*#*#")
     return temp
@@ -501,14 +519,14 @@ def Rule24(passwd):
     sum of the digits of theur ascii value
     '''
     debug("Rule24")
-    val = ord(passwd[seq[0]])
+    val = ord(passwd[seq[0] % len(passwd)])
     val = str(val)
     a = (sum(list(map(int, str(val))))) % 10
-    passwd = passwd.replace(passwd[seq[0]], str(a))
-    val = ord(passwd[seq[1]])
+    passwd = passwd.replace(passwd[(seq[0] % len(passwd))], str(a))
+    val = ord(passwd[seq[1] % len(passwd)])
     val = str(val)
     a = (sum(list(map(int, str(val))))) % 10
-    passwd = passwd.replace(passwd[seq[1]], str(a))
+    passwd = passwd.replace(passwd[(seq[1] % len(passwd))], str(a))
 
     debug(passwd)
     debug("#*#*#*#*#*#*#*#*#*#*#*#*#*#*#")
@@ -544,6 +562,13 @@ def Rule25(passwd):
     return passwd + str(a) + operator + str(b) + "=" + str(result)
 
 def Rule26(inp_str):
+    '''
+    adding something between the words
+    (ex - "the!cat~is(out_of/the;box")
+    - there is an array with all the special chrs ,
+    the order in which they are applied is infered from
+    user sequence !
+    '''
     debug("Rule26")
     chrs = ['!','@','%','$','#','^','&','_','~']
     l = inp_str.strip()
@@ -561,6 +586,10 @@ def Rule26(inp_str):
     return out_str
 
 def Rule27(inp_str):
+    '''
+    adding a smiley at the end of the string ,
+    the smiley is inferred from the seq again
+    '''
     debug("Rule27")
     smileys = [':(',':)',':P',':D',':p',':d',':o','*_*','o_o','^.^',':|']
     num = sum(seq)
@@ -572,6 +601,9 @@ def Rule27(inp_str):
     return out
 
 def Rule28(inp_str):
+    '''
+    swapping cases at indices mentioned by the seq
+    '''
     debug("Rule28")
     new = list(inp_str)
     for i in seq:
@@ -586,23 +618,27 @@ def Rule28(inp_str):
 
 # Check this function --- Introducing Gibberish characters
 def Rule29(inp_str):
-    debug("Rule29")
     '''
+    depending on the seq , either the odd indices
+    or the even indices are either incremented or decremented
+    by sum(seq)%3
+    '''
+    debug("Rule29")
     chrs = list(inp_str);
     a = sum(seq) % 3
 
     if(sum(seq) % 2 == 0):
         for i in range(0, len(chrs)):
             if(i % 2 == 0):
-                chrs[i] = chr(ord(chrs[i]) + a)
+                chrs[i] = chr(33+(ord(chrs[i]) + a)%(126-33))
             else:
-                chrs[i] = chr(ord(chrs[i]) - a)
+                chrs[i] = chr(33+(ord(chrs[i]) - a)%(126-33))
     else:
         for i in range(0, len(chrs)):
             if(i % 2 == 0):
-                chrs[i] = chr(ord(chrs[i]) - a)
+                chrs[i] = chr(33+(ord(chrs[i]) - a)%(126-33))
             else:
-                chrs[i] = chr(ord(chrs[i]) + a)
+                chrs[i] = chr(33+(ord(chrs[i]) + a)%(126-33))
 
     out = "".join(chrs)
 
@@ -610,17 +646,22 @@ def Rule29(inp_str):
     debug("#*#*#*#*#*#*#*#*#*#*#*#*#*#*#")
 
     return out
-    '''
-    return inp_str
 
 def Rule30(inp_str):
+    '''
+    adding all the ascii's of chrs in the inp_str
+    and appending the equivalent character of the
+    ascii number obtained
+    '''
     debug("Rule30")
 
     chrs = list(inp_str)
     s = 0
-    for i in range(0,len(chrs)):
+
+    for i in range(0, len(chrs)):
         s = s + ord(chrs[i])
-    chrs.append(chr(97 + s % 255))
+
+    chrs.append(chr(33 + (s % (126-33))))
     out = "".join(chrs)
 
     debug(out)
@@ -629,15 +670,18 @@ def Rule30(inp_str):
     return out
 
 def Rule31(inp_str):
-    debug("Rule31")
     '''
+    condenses consecutive same characters
+    into countCharacter
+    '''
+    debug("Rule31")
     chrs = list(inp_str)
     out = []
     count = 1
     i = 0
 
     while(i < len(chrs)):
-        while(i + 1 < len(chrs) and chrs[i] == chrs[i+1]):
+        while((i + 1) < len(chrs) and chrs[i] == chrs[i+1]):
             count += 1
             i += 1
 
@@ -647,16 +691,19 @@ def Rule31(inp_str):
         out.append(chrs[i])
         count = 1
         i += 1
+
     out = "".join(out)
 
     debug(out)
     debug("#*#*#*#*#*#*#*#*#*#*#*#*#*#*#")
 
     return out
-    '''
-    return inp_str
 
 def Rule32(inp_str):
+    '''
+    interchanging the two halfs of the myString
+    shahid -> hidsha
+    '''
     debug("Rule32")
     chrs = list(inp_str)
     half = chrs[0 : int(len(chrs)/2)]
@@ -671,11 +718,14 @@ def Rule32(inp_str):
     return out
 
 def Rule33(inp_str):
+    '''
+    adding 1 to first chr's ascii , 2 to the second and so on..
+    '''
     debug("Rule33")
     chrs = list(inp_str)
 
     for i in range(0, len(chrs)):
-        chrs[i] = chr(ord(chrs[i]) + (i % 128))
+        chrs[i] = chr(33+(ord(chrs[i]) + i)%(126-33))
 
     out = "".join(chrs)
 
@@ -685,6 +735,10 @@ def Rule33(inp_str):
     return out
 
 def Rule34(inp_str):
+    '''
+    introducing the current system date-time
+    into the password , at indices inferred from the user-sequence
+    '''
     global dt
     debug("Rule34")
 
@@ -708,9 +762,22 @@ def Rule34(inp_str):
     return out
 
 def Rule35(inp_str):
+    '''
+    Replacing certain characters by thier sound
+    '''
     debug("Rule35")
 
-    d = {'a':"yeh", 'e':"eh", 'i':"ai", 'o':"ohh", 'y':"you"}
+    d = { 'a': "yEh",
+          'e': "eH",
+          'i': "4i!",
+          'o': "0Hh",
+          'u': "y0U",
+          'y': "whAi!",
+          'r': "aRr",
+          's': "YaS$",
+          't': "TeA!!",
+          'w': "d0ubleU"
+          }
     chrs = list(inp_str)
 
     for i in range(len(chrs)):
@@ -734,12 +801,14 @@ def main():
     option = int(input())
     if(option == 1):
         print("\n\t\tTHE PASSWORD GENERATOR\n\n")
-        user_pass = input("  Enter some password you can remember (It can be phrase too)\n\n  : ")
+        user_pass = input("  Enter a base password that you can remember (It can be phrase too)\n\n  : ")
 
         # We give a random number sequence to the user indicating the positions at which
         # tweaking should be done to the base password incase that rule is applied to the password
 
         # The length the sequence is limited to be 3 - 7
+
+        user_level =int(input("\n    Enter the strength level required:\n\n 1 - Moderate\n 2 - Fairly Strong\n 3 - Highly Strong \n"))
         user_sequence_length = (random.randint(3, random.randint(3, 7)))
 
         times = (user_sequence_length % 3) + 1
@@ -758,8 +827,12 @@ def main():
         # How many rules to apply for this user?
 
         # Generate random number of random numbers!!
-
-        num_rules = (random.randint(5, random.randint(5, 8)))
+        if(user_level==1):
+            num_rules = (random.randint(3, random.randint(3, 6)))
+        elif(user_level==2):
+            num_rules = (random.randint(5, random.randint(5, 9)))
+        else:
+            num_rules = (random.randint(7, random.randint(7, 11)))
 
         l = [random.randint(1, 35) for i in range(num_rules)]
         debug("l = " + str(l))
@@ -776,9 +849,15 @@ def main():
         debug(num)
 
         to_remember = int2base32(int(num))
+        alpha={'a':'Apple','b':'Ball','c':'Cat','d':'Dog','e':'English','f':'False','g':'God','h':'Hat','i':'India','j':'Jammu','k':'Kashmir','l':'Lemon','m':'Mango','n':'Nike','o':'Orange','p':'Puma','q':'Queue','r':'Rice','s':'Sad','t':'Tall','u':'Up','v':'Van','w':'War','x':'Exit','y':'Yellow','z':'Zebra'}
 
-        print("\n\nRemember this shit !! --> ", to_remember, end = '\n\n')
-
+        print("\n\nRemember this key --> ", to_remember, end = '\n\n')
+        print("\nThis may help :)\n")
+        for g in to_remember:
+            if(g.isalpha()):
+                print(' ',g,'as in ',alpha[g.lower()])
+            else:
+                print(' ',g)
         # Cascade apply the rules
         ends = user_pass
 
